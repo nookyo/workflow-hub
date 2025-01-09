@@ -19,10 +19,14 @@ on:
         required: true
       maven_password:
         required: true   
+      maven_gpg_private_key:
+        required: true
+      maven_gpg_passphrase:
+        required: true
 
     outputs:
       artifact_path:
-        description: 'Путь к созданному артефакту'
+        description: 'Path to the created artifact'
         value: ${{ jobs.build.outputs.artifact_path }}
 
 jobs:
@@ -34,6 +38,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          server-id: ossrh
+          server-username: ${{ secrets.maven_username }}
+          server-password: ${{ secrets.maven_password }} 
+          gpg-private-key: ${{ secrets.maven_gpg_private_key }}
+          gpg-passphrase: ${{ secrets.maven_gpg_passphrase }}
+
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -42,43 +57,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
-    #   - name: Set up JDK
-    #     uses: actions/setup-java@v3
-    #     with:
-    #       distribution: 'temurin'
-    #       java-version: '21'
-
-    #   - name: Build with Maven
-    #     run: mvn ${{ inputs.maven_command }}
-      - name: Verify Maven credentials
-        run: echo "MAVEN_USERNAME=${{ secrets.maven_username }} MAVEN_PASSWORD=${{ secrets.maven_password }}"
-
-      - name: Verify artifact path
-        run: ls -la 
-
-
-      - name: Set up Maven Central Repository     
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          server-id: ossrh
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-
-      - name: Publish package
-        # run: mvn --batch-mode deploy
-
-        # run: mvn --batch-mode deploy  -DaltDeploymentRepository=ossrh::default::https://oss.sonatype.org/service/local/staging/deploy/maven2/
-        run: mvn --batch-mode deploy -X
-        
+      - name: Sign and Deploy jar to Maven Central   
+        run: |
+          mvn --batch-mode verify
+          mvn --batch-mode deploy
         env:
           MAVEN_USERNAME: ${{ secrets.maven_username }}
-          MAVEN_PASSWORD: ${{ secrets.maven_password }}   
-
-      - name: Upload artifact
-        id: upload_artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ inputs.artifact_name }}
-          path: ${{ inputs.artifact_path }}
+          MAVEN_PASSWORD: ${{ secrets.maven_password }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.maven_gpg_passphrase }}
