@@ -48,6 +48,9 @@ jobs:
           server-password: ${{ secrets.maven_password }} 
           gpg-private-key: ${{ secrets.maven_gpg_private_key }}
           gpg-passphrase: ${{ secrets.maven_gpg_passphrase }}
+     
+      - name: Display settings.xml
+        run: cat ~/.m2/settings.xml
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
