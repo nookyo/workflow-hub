@@ -58,9 +58,7 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Sign and Deploy jar to Maven Central   
-        run: |
-          mvn --batch-mode verify
-          mvn --batch-mode deploy
+        run: mvn --batch-mode deploy
         env:
           MAVEN_USERNAME: ${{ secrets.maven_username }}
           MAVEN_PASSWORD: ${{ secrets.maven_password }}
