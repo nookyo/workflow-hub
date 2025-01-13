@@ -31,8 +31,8 @@ jobs:
         git config --global user.email "publisher@qubership.org"
         git config --global user.name "Qubership User"
         git add pom.xml
-        git commit -m "Update revision to ${{ github.sha }}"
-        git push
+        git commit -m "Update revision to ${{ inputs.version }}"
+        git push origin main 
 
     - name: Create a new tag
       run: |
