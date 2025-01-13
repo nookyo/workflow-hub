@@ -14,7 +14,10 @@ on:
       server_id:
         required: false
         type: string
-        default: "ossrh"    
+        default: "ossrh"
+      revision:
+        required: true
+        type: string      
 
     secrets:
       maven_username:
@@ -31,10 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
-        # with:
-        #   ref: main
-        #   fetch-depth: 0
+        uses: actions/checkout@v4
+        with:
+          ref: v${{ inputs.revision }}
+          fetch-depth: 0
 
       - name: show Pom.xml 
         run: cat pom.xml
