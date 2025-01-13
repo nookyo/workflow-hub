@@ -35,6 +35,18 @@ jobs:
      
       - name: show Pom.xml 
         run: cat pom.xml
+        
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+
+      - name: Maven build  
+        run: mvn clean install
 
       # - name: Set up JDK
       #   uses: actions/setup-java@v4
