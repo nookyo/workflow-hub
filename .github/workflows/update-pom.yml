@@ -21,12 +21,10 @@ jobs:
         echo "Listing all files in the workspace..."
         ls -la  
 
-    - name: Update version in pom.xml
-      uses: peter-evans/xml-update@v1
-      with:
-        file: pom.xml
-        xpath: '/project/properties/revision'
-        value: ${{ github.event.inputs.version }}
+    - name: Update revision in pom.xml
+      run: |
+          echo "Updating revision value in pom.xml..."
+          sed -i "s|<revision>.*</revision>|<revision>${{ github.event.inputs.version }}</revision>|" pom.xml
 
     - name: Show contents of pom.xml
       run: cat pom.xml
