@@ -35,9 +35,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        # with:
-        #   ref: main
-        #   fetch-depth: 0
+        with:
+          ref: v${{ inputs.revision }}
+          fetch-depth: 0
 
       - name: show Pom.xml 
         run: cat pom.xml
