@@ -7,6 +7,14 @@ on:
         required: true
         type: string
         default: "2050.1.0.0"
+      draft:
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        required: false
+        type: boolean
+        default: false      
 
 jobs:
   list-files:
@@ -40,13 +48,18 @@ jobs:
         git tag $VERSION
         git push origin $VERSION  # Push the tag to the repository
 
+    - name: Generate release notes
+      uses: release-drafter/release-drafter@v5
+      with:
+        config-name: .github/release-drafter.yml
+
     - name: Create a GitHub release
       uses: actions/create-release@v1
       with:
-        tag_name: v${{ inputs.version }}  # Tag name should match the created tag
-        release_name: Release v${{ inputs.version }}  # Release name using version
-        body: "Release for commit ${{ inputs.version }}"  # Release description
-        draft: false  # Set to true if you want to create a draft release
-        prerelease: false  # Set to true if it's a pre-release version
+        tag_name: v${{ inputs.version }}
+        release_name: Release v${{ inputs.version }} 
+        body: ${{ steps.release_drafter.outputs.notes }}
+        draft: ${{ inputs.draft }}
+        prerelease: ${{ inputs.prerelease }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for API authentication
