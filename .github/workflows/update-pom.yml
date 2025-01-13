@@ -2,6 +2,11 @@ name: List Files in Workspace
 
 on:
   workflow_call: 
+    inputs:
+      version:
+        required: true
+        type: string
+        default: "2050.1.0.0"
 
 jobs:
   list-files:
@@ -15,3 +20,13 @@ jobs:
       run: |
         echo "Listing all files in the workspace..."
         ls -la  
+
+    - name: Update version in pom.xml
+      uses: endjin/xml-update-action@v1.0.0
+      with:
+        file: pom.xml
+        xpath: '/project/properties/version'
+        value: ${{ github.event.inputs.version }}
+        
+    - name: Show contents of pom.xml
+      run: cat pom.xml    
