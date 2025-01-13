@@ -24,7 +24,7 @@ jobs:
     - name: Update revision in pom.xml
       run: |
           echo "Updating revision value in pom.xml..."
-          sed -i "s|<revision>.*</revision>|<revision>${{ github.event.inputs.version }}</revision>|" pom.xml
+          sed -i "s|<revision>.*</revision>|<revision>${{ inputs.version }}</revision>|" pom.xml
 
     - name: Commit changes to pom.xml
       run: |
@@ -36,16 +36,16 @@ jobs:
 
     - name: Create a new tag
       run: |
-        VERSION="v${{ github.event.inputs.version }}"
+        VERSION="v${{ inputs.version }}"
         git tag $VERSION
         git push origin $VERSION
 
     - name: Create a GitHub release
       uses: actions/create-release@v1
       with:
-        tag_name: v${{ github.sha }}
-        release_name: Release v${{ github.sha }}
-        body: "Release for commit ${{ github.sha }}"
+        tag_name: v${{ inputs.version }}
+        release_name: Release v${{ inputs.version }}
+        body: "Release for commit ${{ inputs.version }}"
         draft: false
         prerelease: false
       env:
