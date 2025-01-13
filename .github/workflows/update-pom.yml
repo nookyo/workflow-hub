@@ -1,7 +1,7 @@
 name: List Files in Workspace
 
 on:
-  workflow_call: 
+  workflow_call:
     inputs:
       version:
         required: true
@@ -32,21 +32,21 @@ jobs:
         git config --global user.name "Qubership User"
         git add pom.xml
         git commit -m "Update revision to ${{ inputs.version }}"
-        git push origin main 
+        git push origin main  # Ensure that you have permission to push to main
 
     - name: Create a new tag
       run: |
         VERSION="v${{ inputs.version }}"
         git tag $VERSION
-        git push origin $VERSION
+        git push origin $VERSION  # Push the tag to the repository
 
     - name: Create a GitHub release
       uses: actions/create-release@v1
       with:
-        tag_name: v${{ inputs.version }}
-        release_name: Release v${{ inputs.version }}
-        body: "Release for commit ${{ inputs.version }}"
-        draft: false
-        prerelease: false
+        tag_name: v${{ inputs.version }}  # Tag name should match the created tag
+        release_name: Release v${{ inputs.version }}  # Release name using version
+        body: "Release for commit ${{ inputs.version }}"  # Release description
+        draft: false  # Set to true if you want to create a draft release
+        prerelease: false  # Set to true if it's a pre-release version
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for API authentication
