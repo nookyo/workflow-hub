@@ -3,7 +3,7 @@ name: Create GitHub Release
 on:
   workflow_call:
     inputs:
-      version:
+      revision:
         required: true
         type: string
       draft:
@@ -23,9 +23,9 @@ jobs:
     - name: Create a GitHub release
       uses: actions/create-release@v1
       with:
-        tag_name: v${{ inputs.version }}
-        release_name: Release v${{ inputs.version }}
-        body: Release v${{ inputs.version }}
+        tag_name: v${{ inputs.revision }}
+        release_name: Release v${{ inputs.revision }}
+        body: Release v${{ inputs.revision }}
         draft: ${{ inputs.draft }}
         prerelease: ${{ inputs.prerelease }}
       env:
