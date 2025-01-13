@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3  # Шаг для клонирования репозитория
+      uses: actions/checkout@v3  # Step to clone the repository
 
     - name: List all files in the workspace
       run: |
@@ -22,11 +22,11 @@ jobs:
         ls -la  
 
     - name: Update version in pom.xml
-      uses: endjin/xml-update-action@v1.0.0
+      uses: peter-evans/xml-update@v1
       with:
         file: pom.xml
         xpath: '/project/properties/revision'
         value: ${{ github.event.inputs.version }}
 
     - name: Show contents of pom.xml
-      run: cat pom.xml    
+      run: cat pom.xml
