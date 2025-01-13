@@ -1,0 +1,17 @@
+name: List Files in Workspace
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3  # Шаг для клонирования репозитория
+
+    - name: List all files in the workspace
+      run: |
+        echo "Listing all files in the workspace..."
+        ls -la  
