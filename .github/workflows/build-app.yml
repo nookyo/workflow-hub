@@ -37,6 +37,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: ${{ inputs.java_version }}
+          distribution: 'temurin'
           server-id: ${{ inputs.server_id }}
           server-username: MAVEN_USERNAME
           server-password: MAVEN_PASSWORD
