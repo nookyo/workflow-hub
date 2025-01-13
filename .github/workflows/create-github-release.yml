@@ -14,6 +14,9 @@ on:
         required: false
         type: boolean
         default: false
+      release_info:
+        required: false
+        type: string  
 
 jobs:
   create-release:
