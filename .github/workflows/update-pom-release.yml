@@ -1,4 +1,4 @@
-name: Update Version for Release
+name: Update Version on piom.xml
 
 on:
   workflow_call:

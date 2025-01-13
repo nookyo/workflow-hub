@@ -1,4 +1,4 @@
-name: Java Build Workflow
+name: Maven Publish
 
 on:
   workflow_call:
