@@ -1,0 +1,32 @@
+name: Create GitHub Release
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+      draft:
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Create a GitHub release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v${{ inputs.version }}
+        release_name: Release v${{ inputs.version }}
+        body: Release v${{ inputs.version }}
+        draft: ${{ inputs.draft }}
+        prerelease: ${{ inputs.prerelease }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

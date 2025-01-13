@@ -1,0 +1,32 @@
+name: Update Version for Release
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+
+jobs:
+  update-and-commit-release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Update version in the specified file
+      run: |
+        echo "Updating version in ${{ inputs.file }}..."
+        sed -i "s|<revision>.*</revision>|<revision>${{ inputs.version }}</revision>|" ${{ inputs.file }}
+
+    - name: Commit changes
+      run: |
+        git config --global user.email "publisher@qubership.org"
+        git config --global user.name "Qubership User"
+        git add ${{ inputs.file }}
+        git commit -m "Update version to ${{ inputs.version }} for release"
+        git push origin main
