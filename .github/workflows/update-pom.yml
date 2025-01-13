@@ -1,7 +1,7 @@
 name: List Files in Workspace
 
 on:
-  workflow_dispatch:
+  workflow_call: 
 
 jobs:
   list-files:
