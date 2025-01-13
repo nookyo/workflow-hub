@@ -11,14 +11,14 @@ on:
         type: string
 
 jobs:
-  update-and-commit-release:
+  update-pom:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Update version in the specified file
+    - name: Update version in the pom file
       run: |
         echo "Updating version in ${{ inputs.file }}..."
         sed -i "s|<revision>.*</revision>|<revision>${{ inputs.revision }}</revision>|" ${{ inputs.file }}

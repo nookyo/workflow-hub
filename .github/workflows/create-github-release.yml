@@ -19,7 +19,7 @@ on:
         type: string  
 
 jobs:
-  create-release:
+  create-git-release:
     runs-on: ubuntu-latest
 
     steps:
