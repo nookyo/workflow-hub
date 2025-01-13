@@ -26,5 +26,27 @@ jobs:
           echo "Updating revision value in pom.xml..."
           sed -i "s|<revision>.*</revision>|<revision>${{ github.event.inputs.version }}</revision>|" pom.xml
 
-    - name: Show contents of pom.xml
-      run: cat pom.xml
+    - name: Commit changes to pom.xml
+      run: |
+        git config --global user.email "publisher@qubership.org"
+        git config --global user.name "Qubership User"
+        git add pom.xml
+        git commit -m "Update revision to ${{ github.sha }}"
+        git push
+
+    - name: Create a new tag
+      run: |
+        VERSION="v${{ github.event.inputs.version }}"
+        git tag $VERSION
+        git push origin $VERSION
+
+    - name: Create a GitHub release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v${{ github.sha }}
+        release_name: Release v${{ github.sha }}
+        body: "Release for commit ${{ github.sha }}"
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
