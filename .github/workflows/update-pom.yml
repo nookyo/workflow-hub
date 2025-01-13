@@ -60,7 +60,7 @@ jobs:
       with:
         tag_name: v${{ inputs.version }}
         release_name: Release v${{ inputs.version }} 
-        body: ${{ steps.release_drafter.outputs.notes }}
+        body: Release v${{ inputs.version }} 
         draft: ${{ inputs.draft }}
         prerelease: ${{ inputs.prerelease }}
       env:
