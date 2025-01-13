@@ -40,20 +40,13 @@ jobs:
         git config --global user.name "Qubership User"
         git add pom.xml
         git commit -m "Update revision to ${{ inputs.version }}"
-        git push origin main  # Ensure that you have permission to push to main
+        git push origin main 
 
     - name: Create a new tag
       run: |
         VERSION="v${{ inputs.version }}"
         git tag $VERSION
         git push origin $VERSION  # Push the tag to the repository
-
-    - name: Generate release notes
-      uses: release-drafter/release-drafter@v5
-      with:
-        config-name: .github/release-drafter.yml
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for API authentication  
 
     - name: Create a GitHub release
       uses: actions/create-release@v1
