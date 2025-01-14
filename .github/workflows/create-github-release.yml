@@ -23,11 +23,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        ref: main
-        fetch-depth: 0      
+    - name: Pull latest changes
+      run: |
+        git config --global user.email "tech@qubership.com"
+        git config --global user.name "tech"
+        git pull origin main    
 
     - name: Create a GitHub release
       uses: actions/create-release@v1
