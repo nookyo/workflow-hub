@@ -39,46 +39,46 @@ jobs:
           ref: v${{ inputs.revision }}
           fetch-depth: 0
 
-      # - name: Debug pom.xml 
-      #   run: cat pom.xml
+      - name: Debug pom.xml 
+        run: cat pom.xml
         
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      # - name: Cache Maven dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-maven-
 
 
       # - name: Maven build  
       #   run: mvn clean install        
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: ${{ inputs.java_version }}
-          distribution: 'temurin'
-          server-id: ${{ inputs.server_id }}
-          server-username: MAVEN_USERNAME
-          server-password: MAVEN_PASSWORD
-          gpg-private-key: ${{ secrets.maven_gpg_private_key }}
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      # - name: Set up JDK
+      #   uses: actions/setup-java@v4
+      #   with:
+      #     java-version: ${{ inputs.java_version }}
+      #     distribution: 'temurin'
+      #     server-id: ${{ inputs.server_id }}
+      #     server-username: MAVEN_USERNAME
+      #     server-password: MAVEN_PASSWORD
+      #     gpg-private-key: ${{ secrets.maven_gpg_private_key }}
+      #     gpg-passphrase: MAVEN_GPG_PASSPHRASE
      
-      - name: Display settings.xml
-        run: cat ~/.m2/settings.xml
+      # - name: Display settings.xml
+      #   run: cat ~/.m2/settings.xml
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+      # - name: Cache Maven dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-maven-
 
-      - name: Sign and Deploy jar to Maven Central   
-        run: mvn ${{ inputs.maven_command }}
-        env:
-          MAVEN_USERNAME: ${{ secrets.maven_username }}
-          MAVEN_PASSWORD: ${{ secrets.maven_password }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.maven_gpg_passphrase }}     
+      # - name: Sign and Deploy jar to Maven Central   
+      #   run: mvn ${{ inputs.maven_command }}
+      #   env:
+      #     MAVEN_USERNAME: ${{ secrets.maven_username }}
+      #     MAVEN_PASSWORD: ${{ secrets.maven_password }}
+      #     MAVEN_GPG_PASSPHRASE: ${{ secrets.maven_gpg_passphrase }}     
