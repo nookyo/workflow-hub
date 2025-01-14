@@ -39,7 +39,7 @@ jobs:
           ref: v${{ inputs.revision }}
           fetch-depth: 0
 
-      - name: show Pom.xml 
+      - name: Debug pom.xml 
         run: cat pom.xml
         
       - name: Cache Maven dependencies
