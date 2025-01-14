@@ -27,17 +27,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0      
-
-
-    - name: debug
-      run: ls -la
+        ref: main
+        fetch-depth: 0    
 
     - name: Pull latest changes
       run: |
-        git config --global user.email "tech@qubership.com"
-        git config --global user.name "tech"
-        git pull origin main    
+        git fetch origin main
+        git reset --hard origin/main
+        git log -1 
 
     - name: Create a GitHub release
       uses: actions/create-release@v1
