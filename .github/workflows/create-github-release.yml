@@ -36,13 +36,26 @@ jobs:
         git reset --hard origin/main
         git log -1 
 
-    - name: Create a GitHub release
-      uses: actions/create-release@v1
-      with:
-        tag_name: v${{ inputs.revision }}
-        release_name: Release v${{ inputs.revision }}
-        body: Release v${{ inputs.revision }}
-        draft: ${{ inputs.draft }}
-        prerelease: ${{ inputs.prerelease }}
+    - name: Create and push tag
+      run: |
+        git config --global user.email "tech@qubership.com"
+        git config --global user.name "tech"
+        git tag -a v${{ inputs.revision }} -m "Release v${{ inputs.revision }}"
+        git push origin v${{ inputs.revision }}        
+
+    - name: Create GitHub release using gh CLI
+      run: |
+         gh release create v${{ inputs.revision }} --title "Release v${{ inputs.revision }}" --notes "Release v${{ inputs.revision }}"
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}        
+
+    # - name: Create a GitHub release
+    #   uses: actions/create-release@v1
+    #   with:
+    #     tag_name: v${{ inputs.revision }}
+    #     release_name: Release v${{ inputs.revision }}
+    #     body: Release v${{ inputs.revision }}
+    #     draft: ${{ inputs.draft }}
+    #     prerelease: ${{ inputs.prerelease }}
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
