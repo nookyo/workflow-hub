@@ -11,7 +11,7 @@ on:
         type: string
 
 jobs:
-  update-pom:
+  update:
     runs-on: ubuntu-latest
 
     steps:
