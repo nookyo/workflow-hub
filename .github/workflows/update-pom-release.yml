@@ -17,6 +17,9 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+   
+    - name: Check version
+      run: echo "RELEASE_VERSION=${{ inputs.revision }}"
 
     - name: Update version in the pom file
       run: |
