@@ -17,6 +17,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
    
     - name: Check version
       run: echo "RELEASE_VERSION=${{ inputs.revision }}"
@@ -28,6 +30,7 @@ jobs:
 
     - name: Commit changes
       run: |
+        git init
         git config --global user.email "publisher@qubership.org"
         git config --global user.name "Qubership User"
         git add ${{ inputs.file }}
