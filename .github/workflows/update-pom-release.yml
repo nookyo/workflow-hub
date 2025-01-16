@@ -29,10 +29,9 @@ jobs:
         sed -i "s|<revision>.*</revision>|<revision>${{ inputs.revision }}</revision>|" ${{ inputs.file }}
 
     - name: Commit changes
-      run: |
-        git init
+      run: |        
         git config --global user.email "publisher@qubership.org"
         git config --global user.name "Qubership User"
         git add ${{ inputs.file }}
         git commit -m "Update version to ${{ inputs.revision }} for release"
-        git push origin main --force
+        git push -u origin main
