@@ -29,6 +29,12 @@ jobs:
         echo "Updating version in ${{ inputs.file }}..."
         sed -i "s|<revision>.*</revision>|<revision>${{ inputs.revision }}</revision>|" ${{ inputs.file }}
 
+    - name: Switch to main branch
+      run: |
+        git branch -M main
+        git pull origin main
+          
+
     - name: Commit changes
       run: |        
         git config --global user.email "publisher@qubership.org"
