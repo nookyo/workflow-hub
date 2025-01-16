@@ -32,4 +32,4 @@ jobs:
         git config --global user.name "Qubership User"
         git add ${{ inputs.file }}
         git commit -m "Update version to ${{ inputs.revision }} for release"
-        git push origin main
+        git push origin main --force
