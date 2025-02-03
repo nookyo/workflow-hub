@@ -1,0 +1,83 @@
+name: Java Build Workflow
+
+on:
+  workflow_call:
+    inputs:
+      maven_command:
+        required: false
+        type: string
+        default: "clean package"
+      artifact_name:
+        required: true
+        type: string
+      artifact_path:
+        required: true
+        type: string
+
+    secrets:
+      maven_username:
+        required: true
+      maven_password:
+        required: true   
+
+    outputs:
+      artifact_path:
+        description: 'Путь к созданному артефакту'
+        value: ${{ jobs.build.outputs.artifact_path }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      artifact_path: ${{ steps.upload_artifact.outputs.artifact_path }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # - name: Cache Maven dependencies
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.m2
+      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-maven-
+
+    #   - name: Set up JDK
+    #     uses: actions/setup-java@v3
+    #     with:
+    #       distribution: 'temurin'
+    #       java-version: '21'
+
+    #   - name: Build with Maven
+    #     run: mvn ${{ inputs.maven_command }}
+      - name: Verify Maven credentials
+        run: echo "MAVEN_USERNAME=${{ secrets.maven_username }} MAVEN_PASSWORD=${{ secrets.maven_password }}"
+
+      - name: Verify artifact path
+        run: ls -la 
+
+
+      - name: Set up Maven Central Repository     
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          server-id: ossrh
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+
+      - name: Publish package
+        # run: mvn --batch-mode deploy
+
+        run: mvn --batch-mode deploy -X -DaltDeploymentRepository=ossrh::default::https://oss.sonatype.org/service/local/staging/deploy/maven2/
+        
+        env:
+          MAVEN_USERNAME: ${{ secrets.maven_username }}
+          MAVEN_PASSWORD: ${{ secrets.maven_password }}   
+
+      - name: Upload artifact
+        id: upload_artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: ${{ inputs.artifact_path }}

@@ -1,0 +1,60 @@
+name: List Files in Workspace
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+        default: "2050.1.0.0"
+      draft:
+        required: false
+        type: boolean
+        default: false
+      prerelease:
+        required: false
+        type: boolean
+        default: false      
+
+jobs:
+  list-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3  # Step to clone the repository
+
+    - name: List all files in the workspace
+      run: |
+        echo "Listing all files in the workspace..."
+        ls -la  
+
+    - name: Update revision in pom.xml
+      run: |
+          echo "Updating revision value in pom.xml..."
+          sed -i "s|<revision>.*</revision>|<revision>${{ inputs.version }}</revision>|" pom.xml
+
+    - name: Commit changes to pom.xml
+      run: |
+        git config --global user.email "publisher@qubership.org"
+        git config --global user.name "Qubership User"
+        git add pom.xml
+        git commit -m "Update revision to ${{ inputs.version }}"
+        git push origin main 
+
+    - name: Create a new tag
+      run: |
+        VERSION="v${{ inputs.version }}"
+        git tag $VERSION
+        git push origin $VERSION  # Push the tag to the repository
+
+    - name: Create a GitHub release
+      uses: actions/create-release@v1
+      with:
+        tag_name: v${{ inputs.version }}
+        release_name: Release v${{ inputs.version }} 
+        body: Release v${{ inputs.version }} 
+        draft: ${{ inputs.draft }}
+        prerelease: ${{ inputs.prerelease }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub token for API authentication

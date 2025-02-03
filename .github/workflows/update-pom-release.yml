@@ -1,0 +1,44 @@
+name: Update Version on piom.xml
+
+on:
+  workflow_call:
+    inputs:
+      file:
+        required: true
+        type: string
+      revision:
+        required: true
+        type: string
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        ref: main
+   
+    - name: Check version
+      run: echo "RELEASE_VERSION=${{ inputs.revision }}"
+
+    - name: Update version in the pom file
+      run: |
+        echo "Updating version in ${{ inputs.file }}..."
+        sed -i "s|<revision>.*</revision>|<revision>${{ inputs.revision }}</revision>|" ${{ inputs.file }}
+
+    # - name: Switch to main branch
+    #   run: |
+    #     git branch -M main
+    #     git pull origin main
+          
+
+    - name: Commit changes
+      run: |        
+        git config --global user.email "publisher@qubership.org"
+        git config --global user.name "Qubership User"
+        git add ${{ inputs.file }}
+        git commit -m "Update version to ${{ inputs.revision }} for release"
+        git push -u origin main
