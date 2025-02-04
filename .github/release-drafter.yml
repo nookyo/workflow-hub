@@ -12,3 +12,4 @@ categories:
       - chore
 change-template: '- {{message}} ([#{{number}}]({{url}}))'
 no-changes-template: 'No changes in this release.'
+
