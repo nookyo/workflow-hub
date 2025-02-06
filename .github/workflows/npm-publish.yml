@@ -17,6 +17,11 @@ on:
         required: false
         type: boolean
         default: false
+      dist-tag:
+        default: "next"
+        type: string
+        description: "NPM dist-tag"
+        required: false
 
 jobs:
   publish:
@@ -103,8 +108,8 @@ jobs:
           npm config get registry
           if [ "$IS_LERNA" = "true" ]; then
             echo "Publishing with Lerna..."
-            npx lerna publish from-package --yes --no-push --no-git-reset --no-git-tag-version --dist-tag next
+            npx lerna publish from-package --yes --no-push --no-git-reset --no-git-tag-version --dist-tag ${{ inputs.dist-tag }}
           else
             echo "Publishing with npm..."
-            npm publish --tag "next"
+            npm publish --tag ${{ inputs.dist-tag }}
           fi
