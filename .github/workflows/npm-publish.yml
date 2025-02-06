@@ -24,7 +24,7 @@ on:
         required: false
 
 jobs:
-  publish:
+  npm-build-publish:
     runs-on: ubuntu-latest
     env:
       NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
