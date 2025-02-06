@@ -22,6 +22,10 @@ on:
         type: string
         description: "NPM dist-tag"
         required: false
+      branch_name:
+        required: false
+        type: string
+        default: "main"
 
 jobs:
   npm-build-publish:
@@ -96,7 +100,7 @@ jobs:
       - name: Commit and Push changes
         uses: ./actions/commit-and-push
         with:
-          branch_name: 'main'
+          branch_name: ${{ inputs.branch_name }}
 
       - name: Configure npm authentication
         run: |
